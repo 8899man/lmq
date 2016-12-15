@@ -1,5 +1,7 @@
-/vendor
 /.settings
-/.buildpath
 /.project
+/auth.json
+/vendor
 /composer.lock
+/.buildpath
+/.gitignore
