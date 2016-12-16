@@ -1,41 +1,17 @@
 <?php
 namespace LSYS\MQ\Handler;
 use LSYS\MQ\Handler;
-use LSYS\MQ\Exception;
 use LSYS\MQ\Message;
-class Redis implements Handler,RedisShare {
-	public static function get_redis(array $config){
-		$redis = new \Redis();
-		$_config=$config+array(
-			'host'=>'127.0.0.1',
-			'port'=>'6379',
-			'timeout'=>'60',
-			'db'=>NULL,
-		);
-		try{
-			$redis->connect($_config['host'],$_config['port'],$_config['timeout']);
-			$redis->setOption(\Redis::OPT_SERIALIZER, \Redis::SERIALIZER_NONE);
-			if (isset($_config['auth']))$redis->auth($_config['auth']);
-			if (isset($_config['db']))$redis->select($_config['db']);
-		}catch (\Exception $e){
-			throw new Exception($e->getMessage().strtr(" [Host:host Port:port]",array("host"=>$_config['host'],"port"=>$_config['port'])),$e->getCode());
-		}
-		return $redis;
-	}
-	/**
-	 * @var RedisShare
-	 */
-	public static $redis_share;
-	protected static function _redis(array $config){
-		$redis=self::$redis_share==null?Redis::class:self::$redis_share;
-		return $redis::get_redis($config);
-	}
+use LSYS\SService\ServiceShare;
+use LSYS\SService\SRedis\RedisShare;
+class Redis implements Handler,ServiceShare {
+	use RedisShare;
 	/**
 	 * @var \Redis
 	 */
 	protected $_redis;
 	public function __construct(array $config){
-		$this->_redis=self::_redis($config);
+		$this->_redis=self::get_service($config);
 	}
 	public function pop($topic){
 		static $set_timeout;

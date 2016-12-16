@@ -5,12 +5,18 @@
 	"minimum-stability": "dev",
 	"autoload":{
 		"psr-4": {
-        	"LMQ\\" : "src/classes/LMQ/"
+        	"LSYS\\" : "src/classes/LSYS/"
 		}
     },
     "require": {
      	"php": ">=5.5",
-     	"nmred/kafka-php":"v0.1.5"
+     	"nmred/kafka-php":"v0.1.5",
+	 	"shanliu/lsservice":"dev-master"
 	},
-	"license": "Apache-2.0"
+    "repositories":{
+    	"shanliu/lsservice": {
+			"type":"git",
+			"url":"https://git.oschina.net/lonely/lsservice.git"
+		}
+	}
 }
