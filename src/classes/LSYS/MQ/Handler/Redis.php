@@ -2,16 +2,22 @@
 namespace LSYS\MQ\Handler;
 use LSYS\MQ\Handler;
 use LSYS\MQ\Message;
-use LSYS\SService\ServiceShare;
 use LSYS\SService\SRedis\RedisShare;
-class Redis implements Handler,ServiceShare {
+use LSYS\SService;
+use LSYS\Config;
+class Redis implements Handler,SService {
 	use RedisShare;
 	/**
 	 * @var \Redis
 	 */
 	protected $_redis;
-	public function __construct(array $config){
-		$this->_redis=self::get_service($config);
+	public function __construct(Config $config){
+		$_config=$config->get("config",null);
+		if (is_array($_config)){
+			$class=get_class($config);
+			$_config=new $class($config->name().".config");
+		}else $_config=null;
+		$this->_redis = self::get_service($_config);
 	}
 	public function pop($topic){
 		static $set_timeout;

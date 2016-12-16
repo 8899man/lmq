@@ -17,6 +17,10 @@
     	"shanliu/lsservice": {
 			"type":"git",
 			"url":"https://git.oschina.net/lonely/lsservice.git"
-		}
+		},
+        "shanliu/lconfig": {
+           "type":"git",  
+           "url":"https://git.oschina.net/lonely/lconfig.git"  
+        }
 	}
 }

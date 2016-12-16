@@ -1,26 +1,38 @@
 <?php
 namespace LSYS;
-use LSYS\MQ\Config;
 use LSYS\MQ\Handler;
 use LSYS\MQ\Message;
 
 class MQ{
 	public static $topic='LMQ';
-	protected static $_config;
+	/**
+	 *
+	 * @var string default instance name
+	 */
+	public static $config = 'lmq.redis';
+	//inistances
 	protected static $_instances=array();
-	public static function config(Config $config){
-		self::$_config=$config;
-	}
 	/**
 	 * @param Config $config
 	 * @return MQ
 	 */
 	public static function instance(Config $config=null){
-		$config=$config==null?self::$_config:$config;
+		if ($config === NULL){
+			if (is_string(self::$config)){
+				self::$config = new \LSYS\Config\File(self::$config);
+			}
+			$config=self::$config;
+		}
 		$name=$config->name();
 		if (!isset(self::$_instances[$name])){
-			$handler=$config->handler();
-			$obj=new static(new $handler($config->as_array()));
+			$handler=$config->get("handler",NULL);
+			if ($handler==null){
+				throw new Exception ( __('MQ handler not defined in [:name] configuration',array("name"=>$config->name()) ));
+			}
+			if (!class_exists($handler)||!$handler instanceof  \LSYS\MQ\Handler){
+				throw new Exception(__("MQ handler [:handler] wong,not extends \LSYS\MQ\Handler",array("handler"=>$handler)));
+			}
+			$obj=new static(new $handler($config));
 			self::$_instances[$name]=$obj;
 		}
 		return self::$_instances[$name];

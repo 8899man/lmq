@@ -1,8 +1,4 @@
 <?php
-LMQ\MQ::config(new \LMQ\ConfigArr("redis", \LMQ\Handler\Redis::class, array(
-	'host'=>'192.168.2.88',
-	'port'=>6379
-)));
 class oparam extends \LMQ\Param{
 	
 }

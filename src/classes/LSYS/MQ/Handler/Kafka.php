@@ -1,15 +1,16 @@
 <?php
 namespace LSYS\MQ\Handler;
 use LSYS\MQ\Handler;
-use LSYS\MQ\Exception;
+use LSYS\Exception;
 use LSYS\MQ\Message;
+use LSYS\Config;
 class Kafka implements Handler {
 	protected $_config;
 	protected $_produce;
 	protected $_consumer;
-	public function __construct(array $config){
-		if(!class_exists("\ZooKeeper")) throw new Exception('plase install zookeeper extension.');
-		$this->_config=$config+array(
+	public function __construct(Config $config){
+		if(!class_exists("\ZooKeeper")) throw new Exception(__('plase install zookeeper extension.'));
+		$this->_config=$config->get('config',array())+array(
 			'host'=>'127.0.0.1',
 			'timeout'=>'60',
 			'group'=>'default',
