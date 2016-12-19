@@ -5,6 +5,9 @@ use LSYS\MQ\Message;
 use LSYS\SService\SRedis\RedisShare;
 use LSYS\SService;
 use LSYS\Config;
+use LSYS\Loger;
+use LSYS\Exception;
+use function LSYS\__;
 class Redis implements Handler,SService {
 	use RedisShare;
 	/**
@@ -17,10 +20,15 @@ class Redis implements Handler,SService {
 			$class=get_class($config);
 			$_config=new $class($config->name().".config");
 		}else $_config=null;
-		$this->_redis = self::get_service($_config);
+		try{
+			$this->_redis = self::get_service($_config);
+		}catch (\Exception $e){
+			Loger::instance()->addError($e);
+		}
 	}
 	public function pop($topic){
 		static $set_timeout;
+		if (!$this->_redis) throw new Exception(__("redis server is disable"));
 		if (!$set_timeout){
 			$this->_redis->setOption(\Redis::OPT_READ_TIMEOUT, -1);
 			$set_timeout=true;
@@ -30,7 +38,7 @@ class Redis implements Handler,SService {
 		return null;
 	}
 	public function push($message,$topic){
-		if($this->_redis->isConnected()&&$this->_redis->lPush($topic,$message)) return true;
+		if($this->_redis&&$this->_redis->isConnected()&&$this->_redis->lPush($topic,$message)) return true;
 		return false;
 	}
 }
