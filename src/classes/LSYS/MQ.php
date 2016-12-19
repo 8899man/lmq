@@ -44,15 +44,9 @@ class MQ{
 	public function __construct(Handler $handle){
 		$this->_handle=$handle;
 	}
-	public function listen($topic=null,callable $error_callable=NULL){
+	public function listen($topic=null){
 		$topic=$topic===null?self::$topic:$topic;
-		while (true){
-			$msg=$this->_handle->pop($topic);
-			if ($msg==null)continue;
-			$_msg=@unserialize($msg);
-			if ($_msg instanceof Message) $_msg->exec();
-			else if ($callable)call_user_func($callable,$msg);
-		}
+		$this->_handle->listen($topic);
 	}
 	public function push(Message $message,$topic=null){
 		$status=$this->_handle->push(serialize($message),$topic===null?self::$topic:$topic);

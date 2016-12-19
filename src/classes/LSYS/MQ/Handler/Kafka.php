@@ -28,24 +28,33 @@ class Kafka implements Handler {
 		}
 		return $this->_consumer;
 	}
-	public function pop($topic){
+	public function listen($topic){
 		$consumer=$this->_consumer();
 		$consumer->setGroup($this->_config['group']);
 		$consumer->setFromOffset(true);
 		$consumer->setTopic($topic);
-		$result = $consumer->fetch();
-		if(count($result)==0){
-			sleep(1);//not data sleep
-			return null;
-		}
-		foreach ($result as $topicName => $partition) {
-			foreach ($partition as $partId => $messageSet) {
-				foreach ($messageSet as $message) {
-					return (string)$message;
+		while (true){
+			$result = $consumer->fetch();
+			if(count($result)==0){
+				sleep(1);//not data sleep
+				return null;
+			}
+			foreach ($result as $topicName => $partition) {
+				foreach ($partition as $partId => $messageSet) {
+					foreach ($messageSet as $message) {
+						$msg=(string)$message;
+						$_msg=@unserialize($msg);
+						if ($_msg instanceof Message){
+							try{
+								$_msg->exec();
+							}catch (\Exception $e){
+								loger::instance()->addError($e);
+							}
+						}
+					}
 				}
 			}
 		}
-		return null;
 	}
 	public function push($message,$topic){
 		$produce=$this->_produce();

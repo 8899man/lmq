@@ -26,16 +26,26 @@ class Redis implements Handler,SService {
 			Loger::instance()->addError($e);
 		}
 	}
-	public function pop($topic){
+	public function listen($topic){
 		static $set_timeout;
 		if (!$this->_redis) throw new Exception(__("redis server is disable"));
 		if (!$set_timeout){
 			$this->_redis->setOption(\Redis::OPT_READ_TIMEOUT, -1);
 			$set_timeout=true;
 		}
-		$data=$this->_redis->brPop($topic,0);
-		if (isset($data[1])) return $data[1];
-		return null;
+		while (true){
+			$data=$this->_redis->brPop($topic,0);
+			if (!isset($data[1])) continue;
+			$_msg=@unserialize($data[1]);
+			if ($_msg instanceof Message){
+				try{
+					$_msg->exec();
+				}catch (\Exception $e){
+					loger::instance()->addError($e);
+				}
+			}
+		}
+		return true;
 	}
 	public function push($message,$topic){
 		if($this->_redis&&$this->_redis->isConnected()&&$this->_redis->lPush($topic,$message)) return true;
