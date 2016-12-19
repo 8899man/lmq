@@ -1,14 +1,24 @@
 <?php
-class oparam extends \LMQ\Param{
-	
-}
-
-class omsg extends \LMQ\Message{
-	public function __construct(oparam $param,$topic=null){
-		parent::__construct($param,$topic);
+require_once  __DIR__."/Bootstarp.php";
+class omsg extends \LSYS\MQ\Message{
+	protected $_order_id;
+	protected $_product_id;
+	public function set_order_id($order_id){
+		$this->_order_id=$order_id;
+		return $this;
+	}
+	public function set_product_id($product_id){
+		$this->_product_id=$product_id;
+		return $this;
+	}
+	public function serialize () {
+		return json_encode(array($this->_order_id,$this->_product_id));
+	}
+	public function unserialize ($serialized) {
+		list($this->_order_id,$this->_product_id)=json_decode($serialized,true);
 	}
 	public function exec(){
-		$param=$this->get_param();
-		print_r($param);
+		print_r($this->_order_id);
+		print_r($this->_product_id);
 	}
 }

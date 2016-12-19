@@ -6,7 +6,7 @@ require_once  __DIR__."/msq.php";
 
 
 
-\LMQ\MQ::instance()->push(new omsg(oparam::factory('xxxx')));
+\LSYS\MQ::instance()->push(omsg::factory()->set_order_id(1)->set_product_id(1));
 
 
 

@@ -29,7 +29,7 @@ class MQ{
 			if ($handler==null){
 				throw new Exception ( __('MQ handler not defined in [:name] configuration',array("name"=>$config->name()) ));
 			}
-			if (!class_exists($handler)||!$handler instanceof  \LSYS\MQ\Handler){
+			if (!class_exists($handler)||!in_array('LSYS\MQ\Handler',class_implements($handler))){
 				throw new Exception(__("MQ handler [:handler] wong,not extends \LSYS\MQ\Handler",array("handler"=>$handler)));
 			}
 			$obj=new static(new $handler($config));
