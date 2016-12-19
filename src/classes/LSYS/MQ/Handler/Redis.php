@@ -7,7 +7,7 @@ use LSYS\SService;
 use LSYS\Config;
 use LSYS\Loger;
 use LSYS\Exception;
-use function LSYS\__;
+use function LSYS\MQ\__;
 class Redis implements Handler,SService {
 	use RedisShare;
 	/**
