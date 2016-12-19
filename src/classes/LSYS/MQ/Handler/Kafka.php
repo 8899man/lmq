@@ -33,8 +33,11 @@ class Kafka implements Handler {
 		$consumer->setGroup($this->_config['group']);
 		$consumer->setFromOffset(true);
 		$consumer->setTopic($topic);
-		$consumer->setMaxBytes(102400);
-		$result = $consumer->fetch(0);
+		$result = $consumer->fetch();
+		if(count($result)==0){
+			sleep(1);//not data sleep
+			return null;
+		}
 		foreach ($result as $topicName => $partition) {
 			foreach ($partition as $partId => $messageSet) {
 				foreach ($messageSet as $message) {
@@ -45,7 +48,7 @@ class Kafka implements Handler {
 		return null;
 	}
 	public function push($message,$topic){
-		$produce=$produce;
+		$produce=$this->_produce();
 		try{
 			$partitions = $produce->getAvailablePartitions($topic);
 		}catch (\Exception $e){
@@ -61,5 +64,6 @@ class Kafka implements Handler {
 		}catch(\Kafka\Exception $e){
 			return false;
 		}
+		return true;
 	}
 }
