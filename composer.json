@@ -1,6 +1,7 @@
 {
 	"name": "shanliu/lmq",
 	"type": "project",
+	"version": "0.1",
 	"description": "lsys message queue",
 	"minimum-stability": "dev",
 	"autoload":{
