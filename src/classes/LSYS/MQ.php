@@ -55,6 +55,14 @@ class MQ{
 		}
 	}
 	public function push(Message $message,$topic=null){
-		return $this->_handle->push(serialize($message),$topic===null?self::$topic:$topic);
+		$status=$this->_handle->push(serialize($message),$topic===null?self::$topic:$topic);
+		if ($status===false){
+			try{
+				$message->exec();
+			}catch (\Exception $e){
+				return false;
+			}
+		}
+		return true;
 	}
 }
