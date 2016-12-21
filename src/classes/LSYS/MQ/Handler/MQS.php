@@ -10,6 +10,8 @@ use AliyunMNS\Model\SubscriptionAttributes;
 use AliyunMNS\Requests\PublishMessageRequest;
 use AliyunMNS\Requests\CreateTopicRequest;
 use AliyunMNS\Exception\MnsException;
+use LSYS\Core;
+require_once(__DIR__.'/../../../../libs/mns-autoloader.php');
 class MQS implements Handler {
 	/**
 	 * @var \Redis
@@ -20,9 +22,21 @@ class MQS implements Handler {
 		$this->_config=$config->get("config",array())+array(
 			'accessId'=>'',
 			'accessKey'=>'',
-			'endPoint'=>'',
+			'endPoint'=>$this->_end_point_default(),
 		);
+		echo $this->_end_point_default();
 		$this->client = new Client($this->_config['endPoint'], $this->_config['accessId'], $this->_config['accessKey']);
+	}
+	
+	protected function _end_point_default(){
+		$host='127.0.0.1';
+		$port='';
+		$scheme='http://';
+		if(isset($_SERVER['SERVER_PORT'])&&$_SERVER['SERVER_PORT']!='80')$port=':'.$_SERVER['SERVER_PORT'];
+		if (isset($_SERVER['SERVER_NAME'])) $host=$_SERVER['SERVER_NAME'];
+		if (isset($_SERVER['HTTP_HOST'])) $host=$_SERVER['HTTP_HOST'];
+		if(isset($_SERVER['HTTPS'])&&strtolower($_SERVER['HTTPS']) == "on") $scheme="https://";
+		return $scheme.$host.$port.Core::$base_url.'dome/aliyun.php';
 	}
 	
 	protected function get_by_url($url)
@@ -49,23 +63,6 @@ class MQS implements Handler {
 	}
 	
 	public function listen($topic){
-		
-		if (!function_exists('getallheaders'))
-		{
-			function getallheaders()
-			{
-				$headers = array();
-				foreach ($_SERVER as $name => $value)
-				{
-					if (substr($name, 0, 5) == 'HTTP_')
-					{
-						$headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
-					}
-				}
-				return $headers;
-			}
-		}
-		// 1. get the headers and check the signature
 		$tmpHeaders = array();
 		$headers = getallheaders();
 		foreach ($headers as $key => $value)
@@ -77,7 +74,6 @@ class MQS implements Handler {
 		}
 		ksort($tmpHeaders);
 		$canonicalizedMNSHeaders = implode("\n", array_map(function ($v, $k) { return $k . ":" . $v; }, $tmpHeaders, array_keys($tmpHeaders)));
-		
 		$method = $_SERVER['REQUEST_METHOD'];
 		$canonicalizedResource = $_SERVER['REQUEST_URI'];
 		error_log($canonicalizedResource);
@@ -96,6 +92,11 @@ class MQS implements Handler {
 		if (array_key_exists('Content-Type', $headers))
 		{
 			$contentType = $headers['Content-Type'];
+		}
+		if (!isset($headers['Date']))
+		{
+			echo "this mqs request api";
+			return;
 		}
 		$date = $headers['Date'];
 		
@@ -132,7 +133,7 @@ class MQS implements Handler {
 				die($e->getMessage());
 			}
 		}else{
-			Loger::instance()->addDebug("mqs content not match");
+			Loger::instance()->addDebug("mqs bad:".$msg->Message);
 		}
 		http_response_code(200);
 		echo "ok";
@@ -165,9 +166,10 @@ class MQS implements Handler {
 		}
 		return true;
 	}
-	public function subscribe($topic,$host,$port){
+	public function subscribe($topic,$endpoint=null){
+		if ($endpoint==null)$endpoint=$this->_end_point_default();
 		$topic = $this->client->getTopicRef($topic);
-		$attributes = new SubscriptionAttributes($topic, 'http://' . $host . ':' .$port);
+		$attributes = new SubscriptionAttributes($topic, $endpoint);
 		try{
 		$topic->subscribe($attributes);
 		}
@@ -177,7 +179,7 @@ class MQS implements Handler {
 		}
 		return true;
 	}
-	public function unsubscribe($topic,$host,$port){
+	public function unsubscribe($topic){
 		$topic = $this->client->getTopicRef($topic);
 		try
 		{

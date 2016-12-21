@@ -43,7 +43,10 @@ class Redis implements Handler,SService {
 				}catch (\Exception $e){
 					loger::instance()->addError($e);
 				}
+			}else{
+				Loger::instance()->addDebug("mqs bad:".$data[1]);
 			}
+			unset($_msg);
 		}
 		return true;
 	}

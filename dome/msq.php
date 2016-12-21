@@ -1,5 +1,7 @@
 <?php
 require_once  __DIR__."/Bootstarp.php";
+// 设置默认配置
+// \LSYS\MQ::$config="lmq.gearman";
 class omsg extends \LSYS\MQ\Message{
 	protected $_order_id;
 	protected $_product_id;
