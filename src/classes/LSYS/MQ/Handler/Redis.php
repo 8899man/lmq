@@ -39,7 +39,6 @@ class Redis implements Handler,SService {
 			$_msg=@unserialize($data[1]);
 			if ($_msg instanceof Message){
 				try{
-					$_msg->is_daemon=true;
 					$_msg->exec();
 				}catch (\Exception $e){
 					loger::instance()->addError($e);

@@ -126,7 +126,6 @@ class MQS implements Handler {
 		$_msg=@unserialize($msg->Message);
 		if ($_msg instanceof Message){
 			try{
-				$_msg->is_daemon=true;
 				$_msg->exec();
 			}catch (\Exception $e){
 				http_response_code(500);
