@@ -21,6 +21,7 @@ class Gearman implements Handler {
 			$_msg=@unserialize($workload);
 			if ($_msg instanceof Message){
 				try{
+					$_msg->is_daemon=true;
 					$_msg->exec();
 				}catch (\Exception $e){
 					loger::instance()->addError($e);
