@@ -29,6 +29,10 @@
         "shanliu/lconfig": {
            "type":"git",  
            "url":"https://git.oschina.net/lonely/lconfig.git"  
+        },
+		 "packagist": {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
         }
 	}
 }
