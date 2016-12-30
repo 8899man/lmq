@@ -33,21 +33,25 @@ class Redis implements Handler,SService {
 			$this->_redis->setOption(\Redis::OPT_READ_TIMEOUT, -1);
 			$set_timeout=true;
 		}
-		while (true){
-			$data=$this->_redis->brPop($topic,0);
-			if (!isset($data[1])) continue;
-			$_msg=@unserialize($data[1]);
-			if ($_msg instanceof Message){
-				try{
-					$_msg->exec();
-				}catch (\Exception $e){
-					loger::instance()->addError($e);
-				}
-			}else{
-				Loger::instance()->addDebug("mqs bad:".$data[1]);
+		if (defined('LSYS_UNIX_FORK_RUN')&&LSYS_UNIX_FORK_RUN) return $this->_run();
+		while (true){ $this->_run(); }
+		return true;
+	}
+	
+	protected function _run(){
+		$data=$this->_redis->brPop($topic,0);
+		if (!isset($data[1])) continue;
+		$_msg=@unserialize($data[1]);
+		if ($_msg instanceof Message){
+			try{
+				$_msg->exec();
+			}catch (\Exception $e){
+				loger::instance()->addError($e);
 			}
-			unset($_msg);
+		}else{
+			Loger::instance()->addDebug("mqs bad:".$data[1]);
 		}
+		unset($_msg);
 		return true;
 	}
 	public function push($message,$topic){

@@ -1,35 +1,31 @@
 <?php
-if(PHP_SAPI!='cli') throw new Exception("plase run in cli");
-//有效防止进程挂逼...
-if(DIRECTORY_SEPARATOR != '\\'){
-lmq_restart://restart...
+if(PHP_SAPI!='cli') die("plase run in cli");
+define("UNIX_FORK_RUN", DIRECTORY_SEPARATOR != '\\'&&function_exists('pcntl_fork'));
+if(UNIX_FORK_RUN){
 	//set run user...
-	if (!defined('LMQ_USER')){
-		$u=null;
+	if (!defined('LSYS_MQ_USER')){
+		$userinfo = posix_getpwnam('www');
+		if(isset($userinfo['uid']))$u=$userinfo['uid'];
+		$userinfo = posix_getpwnam('nobody');
+		if(isset($userinfo['uid']))$u=$userinfo['uid'];
 		foreach($argv as $v){
 			if(isset($is_u)){
 				$u=trim($v);break;
 			}
 			if($v=='-u')$is_u=true;
 		}
-	}else $u=LMQ_USER;
-	if($u){
-		$userinfo = posix_getpwnam($u);
-		if(!isset($userinfo['uid'])) throw new Exception("can't find :".$u);
-		@posix_setuid($userinfo['uid']);
-	}else{
-		$userinfo = posix_getpwnam('nobody');
-		if(isset($userinfo['uid'])){
-			@posix_setuid($userinfo['uid']);
-		}
-		$userinfo = posix_getpwnam('www');
-		if(isset($userinfo['uid'])){
-			@posix_setuid($userinfo['uid']);
-		}
+		if (isset($u))define("LSYS_MQ_USER", $u);
 	}
+	if (defined('LSYS_MQ_USER')){
+		$userinfo = posix_getpwnam(LSYS_MQ_USER);
+		if(!isset($userinfo['uid'])) die("can't find :".LSYS_MQ_USER);
+		@posix_setuid($userinfo['uid']);
+	}
+	unset($u,$is_u,$userinfo);
+lmq_restart://restart...
 	//
 	$pid = pcntl_fork();
-	if ($pid == -1) throw new Exception(pcntl_get_last_error());
+	if ($pid == -1) die(pcntl_get_last_error());
 	else if ($pid) {
 		//wait child end..
 		pcntl_wait($status,WUNTRACED);
