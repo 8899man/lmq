@@ -4,10 +4,11 @@ define("LSYS_UNIX_FORK_RUN", DIRECTORY_SEPARATOR != '\\'&&function_exists('pcntl
 if(LSYS_UNIX_FORK_RUN){
 	//set run user...
 	if (!defined('LSYS_MQ_USER')){
-		$userinfo = posix_getpwnam('www');
-		if(isset($userinfo['uid']))$u=$userinfo['uid'];
-		$userinfo = posix_getpwnam('nobody');
-		if(isset($userinfo['uid']))$u=$userinfo['uid'];
+		$web_user=array('nobody','www');
+		foreach ($web_user as $u){
+			$userinfo = posix_getpwnam($u);
+			if(isset($userinfo['uid']))break;
+		}
 		foreach($argv as $v){
 			if(isset($is_u)){
 				$u=trim($v);break;
