@@ -33,7 +33,7 @@ class Redis implements Handler,SService {
 			$this->_redis->setOption(\Redis::OPT_READ_TIMEOUT, -1);
 			$set_timeout=true;
 		}
-		if (defined('LSYS_UNIX_FORK_RUN')&&LSYS_UNIX_FORK_RUN){
+		if (defined('LSYS_MQ_FORK_RUN')&&LSYS_MQ_FORK_RUN){
 			if (LSYS_MQ_LIMIT===true) $max=true;
 			else $max=LSYS_MQ_LIMIT>0?LSYS_MQ_LIMIT:1;
 		}else $max=true;
