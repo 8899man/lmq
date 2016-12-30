@@ -2,7 +2,6 @@
 if(PHP_SAPI!='cli') die("plase run in cli");
 define("LSYS_MQ_FORK_RUN", DIRECTORY_SEPARATOR != '\\'&&function_exists('pcntl_fork'));
 if(LSYS_MQ_FORK_RUN){
-	if (defined('LSYS_MQ_LIMIT')) define("LSYS_MQ_LIMIT",1);
 	//set run user...
 	if (!defined('LSYS_MQ_USER')){
 		$web_user=array('nobody','www');
