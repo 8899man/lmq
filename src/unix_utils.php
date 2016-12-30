@@ -1,7 +1,7 @@
 <?php
 if(PHP_SAPI!='cli') die("plase run in cli");
-define("UNIX_FORK_RUN", DIRECTORY_SEPARATOR != '\\'&&function_exists('pcntl_fork'));
-if(UNIX_FORK_RUN){
+define("LSYS_UNIX_FORK_RUN", DIRECTORY_SEPARATOR != '\\'&&function_exists('pcntl_fork'));
+if(LSYS_UNIX_FORK_RUN){
 	//set run user...
 	if (!defined('LSYS_MQ_USER')){
 		$userinfo = posix_getpwnam('www');
