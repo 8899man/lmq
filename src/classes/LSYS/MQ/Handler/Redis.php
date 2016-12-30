@@ -34,7 +34,8 @@ class Redis implements Handler,SService {
 			$set_timeout=true;
 		}
 		if (defined('LSYS_UNIX_FORK_RUN')&&LSYS_UNIX_FORK_RUN){
-			$max=LSYS_UNIX_EACH_NUM>0?LSYS_UNIX_EACH_NUM:1;
+			if (LSYS_MQ_LIMIT===true) $max=true;
+			else $max=LSYS_MQ_LIMIT>0?LSYS_MQ_LIMIT:1;
 		}else $max=true;
 		while ($max){ $this->_run($topic); }
 		return true;
