@@ -110,7 +110,7 @@ class MQS implements Handler {
 		$pass = $this->verify($stringToSign, $signature, $publicKey);
 		if (!$pass)
 		{
-			Loger::instance()->addDebug("mqs content verify fail");
+			Loger::instance()->add_debug("mqs content verify fail");
 			http_response_code(400);
 			return;
 		}
@@ -118,7 +118,7 @@ class MQS implements Handler {
 		$content = file_get_contents("php://input");
 		if (!empty($contentMd5) && $contentMd5 != base64_encode(md5($content)))
 		{
-			Loger::instance()->addDebug("mqs content not match");
+			Loger::instance()->add_debug("mqs content not match");
 			http_response_code(401);
 			return;
 		}
@@ -129,11 +129,11 @@ class MQS implements Handler {
 				$_msg->exec();
 			}catch (\Exception $e){
 				http_response_code(500);
-				loger::instance()->addError($e);
+				loger::instance()->add_Error($e);
 				die($e->getMessage());
 			}
 		}else{
-			Loger::instance()->addDebug("mqs bad:".$msg->Message);
+			Loger::instance()->add_debug("mqs bad:".$msg->Message);
 		}
 		http_response_code(200);
 		echo "ok";
@@ -146,7 +146,7 @@ class MQS implements Handler {
 		}
 		catch (MnsException $e)
 		{
-			Loger::instance()->addError($e);
+			Loger::instance()->add_error($e);
 			return false;
 		}
 		$topic = $this->client->getTopicRef($topic);
@@ -161,7 +161,7 @@ class MQS implements Handler {
 		}
 		catch (MnsException $e)
 		{
-			Loger::instance()->addError($e);
+			Loger::instance()->add_error($e);
 			return false;
 		}
 		return true;

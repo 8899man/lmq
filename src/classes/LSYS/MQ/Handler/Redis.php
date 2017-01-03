@@ -23,7 +23,7 @@ class Redis implements Handler,SService {
 		try{
 			$this->_redis = self::get_service($_config);
 		}catch (\Exception $e){
-			Loger::instance()->addError($e);
+			Loger::instance()->add_error($e);
 		}
 	}
 	public function listen($topic){
@@ -52,10 +52,10 @@ class Redis implements Handler,SService {
 			try{
 				$_msg->exec();
 			}catch (\Exception $e){
-				loger::instance()->addError($e);
+				loger::instance()->add_Error($e);
 			}
 		}else{
-			Loger::instance()->addDebug("mqs bad:".$data[1]);
+			Loger::instance()->add_debug("mqs bad:".$data[1]);
 		}
 		unset($_msg);
 		return true;

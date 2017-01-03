@@ -48,7 +48,7 @@ class Kafka implements Handler {
 							try{
 								$_msg->exec();
 							}catch (\Exception $e){
-								loger::instance()->addError($e);
+								loger::instance()->add_error($e);
 							}
 						}
 					}

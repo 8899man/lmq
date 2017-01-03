@@ -4,6 +4,7 @@ use LSYS\MQ\Handler;
 use LSYS\MQ\Message;
 use LSYS\Config;
 use LSYS\Exception;
+use LSYS\Loger;
 class Gearman implements Handler {
 	/**
 	 * @var Config
@@ -23,10 +24,10 @@ class Gearman implements Handler {
 				try{
 					$_msg->exec();
 				}catch (\Exception $e){
-					loger::instance()->addError($e);
+					loger::instance()->add_error($e);
 				}
 			}else{
-				Loger::instance()->addDebug("mqs bad:".$workload);
+				Loger::instance()->add_debug("mqs bad:".$workload);
 			}
 			unset($_msg);
 		});
