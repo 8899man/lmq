@@ -1,7 +1,7 @@
-/.settings
-/.project
-/auth.json
 /vendor
 /composer.lock
+/.settings
 /.buildpath
 /.gitignore
+/.project
+//dome/logs/
