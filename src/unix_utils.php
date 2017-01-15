@@ -1,4 +1,10 @@
 <?php
+/**
+ * lsys mq
+ * @author     Lonely <shan.liu@msn.com>
+ * @copyright  (c) 2017 Lonely <shan.liu@msn.com>
+ * @license    http://www.apache.org/licenses/LICENSE-2.0
+ */
 if(PHP_SAPI!='cli') die("plase run in cli");
 define("LSYS_MQ_FORK_RUN", DIRECTORY_SEPARATOR != '\\'&&function_exists('pcntl_fork'));
 if(LSYS_MQ_FORK_RUN){
