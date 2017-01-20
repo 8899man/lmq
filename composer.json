@@ -17,22 +17,21 @@
 	 	"shanliu/lsservice":"dev-master",
 	 	"shanliu/lconfig":"dev-master"
 	},
-    "repositories":{
-    	"shanliu/lsservice": {
-			"type":"git",
-			"url":"https://git.oschina.net/lonely/lsservice.git"
-		},
-    	"shanliu/lcore": {
-			"type":"git",
-			"url":"https://git.oschina.net/lonely/lcore.git"
-		},
-        "shanliu/lconfig": {
-           "type":"git",  
-           "url":"https://git.oschina.net/lonely/lconfig.git"  
-        },
-		 "packagist": {
-            "type": "composer",
-            "url": "https://packagist.phpcomposer.com"
-        }
-	}
+    "repositories":[
+		{
+			"name" : "shanliu/lcore",
+			"type" : "git",
+			"url" : "https://git.oschina.net/lonely/lcore.git"
+		}, 
+		{
+			"name" : "shanliu/lconfig",
+			"type" : "git",
+			"url" : "https://git.oschina.net/lonely/lconfig.git"
+		}, 
+		{
+			"name" : "shanliu/lsservice",
+			"type" : "git",
+			"url" : "https://git.oschina.net/lonely/lsservice.git"
+		}
+	]
 }
