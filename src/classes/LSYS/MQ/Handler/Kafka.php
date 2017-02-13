@@ -16,6 +16,7 @@ class Kafka implements Handler {
 	protected $_consumer;
 	public function __construct(Config $config){
 		if(!class_exists("\ZooKeeper")) throw new Exception(__('plase install zookeeper extension.'));
+		if(!class_exists("\Kafka\Produce")) throw new Exception(__('plase run: composer require nmred/kafka-php'));
 		$this->_config=$config->get('config',array())+array(
 			'host'=>'127.0.0.1',
 			'timeout'=>'60',
