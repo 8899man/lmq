@@ -21,11 +21,7 @@ class Redis implements Handler,SService {
 	 */
 	protected $_redis;
 	public function __construct(Config $config){
-		$_config=$config->get("config",null);
-		if (is_array($_config)){
-			$class=get_class($config);
-			$_config=new $class($config->name().".config");
-		}else $_config=null;
+		$_config=\LSYS\ConfigShare::sub_config($config, "config");
 		try{
 			$this->_redis = self::get_service($_config);
 		}catch (\Exception $e){

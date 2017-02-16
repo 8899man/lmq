@@ -25,7 +25,7 @@ class MQ{
 	public static function instance(Config $config=null){
 		if ($config === NULL){
 			if (is_string(self::$config)){
-				self::$config = new \LSYS\Config\File(self::$config);
+				self::$config = \LSYS\ConfigShare::instance(self::$config);
 			}
 			$config=self::$config;
 		}
