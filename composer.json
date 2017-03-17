@@ -15,22 +15,5 @@
 	 	"shanliu/lcore":"dev-master",
 	 	"shanliu/lsservice":"dev-master",
 	 	"shanliu/lconfig":"dev-master"
-	},
-    "repositories":[
-		{
-			"name" : "shanliu/lcore",
-			"type" : "git",
-			"url" : "https://git.oschina.net/lonely/lcore.git"
-		}, 
-		{
-			"name" : "shanliu/lconfig",
-			"type" : "git",
-			"url" : "https://git.oschina.net/lonely/lconfig.git"
-		}, 
-		{
-			"name" : "shanliu/lsservice",
-			"type" : "git",
-			"url" : "https://git.oschina.net/lonely/lsservice.git"
-		}
-	]
+	}
 }
