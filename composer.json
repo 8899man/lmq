@@ -3,7 +3,6 @@
 	"type": "project",
 	"version": "0.1",
 	"description": "lsys message queue",
-	"minimum-stability": "dev",
 	"autoload":{
 		"psr-4": {
         	"LSYS\\" : "src/classes/LSYS/"
