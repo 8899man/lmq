@@ -13,6 +13,7 @@
      	"php": ">=5.5",
 	 	"shanliu/lcore":"dev-master",
 	 	"shanliu/lsservice":"dev-master",
+		"shanliu/lsredis":"dev-master",
 	 	"shanliu/lconfig":"dev-master"
 	}
 }
