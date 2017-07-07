@@ -8,15 +8,14 @@
 namespace LSYS\MQ\Handler;
 use LSYS\MQ\Handler;
 use LSYS\MQ\Message;
-use LSYS\SService\SRedis\RedisShare;
-use LSYS\SService;
 use LSYS\Config;
 use LSYS\Loger;
 use LSYS\Exception;
 use function LSYS\MQ\__;
 use LSYS\Config\SubSet;
-class Redis implements Handler,SService {
-	use RedisShare;
+use LSYS\ShareRedis;
+class Redis implements Handler,ShareRedis {
+	use \LSYS\ShareRedis\RedisShare;
 	/**
 	 * @var \Redis
 	 */
@@ -24,7 +23,7 @@ class Redis implements Handler,SService {
 	public function __construct(Config $config){
 		$_config=$config->exist("config")?new SubSet($config, "config"):NULL;
 		try{
-			$this->_redis = self::get_service($_config);
+			$this->_redis = self::get_share_redis($_config);
 		}catch (\Exception $e){
 			Loger::instance()->add_error($e);
 		}
