@@ -9,7 +9,8 @@ namespace LSYS;
 use LSYS\MQ\Handler;
 use LSYS\MQ\Message;
 
-class MQ{
+class MQ implements ConfigFinder{
+	use \LSYS\ConfigFinder\ConfigShare;
 	public static $topic='LMQ';
 	/**
 	 *
@@ -25,7 +26,7 @@ class MQ{
 	public static function instance(Config $config=null){
 		if ($config === NULL){
 			if (is_string(self::$config)){
-				self::$config = \LSYS\ConfigShare::instance(self::$config);
+				self::$config = self::find_config(self::$config);
 			}
 			$config=self::$config;
 		}

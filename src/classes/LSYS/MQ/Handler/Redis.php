@@ -14,6 +14,7 @@ use LSYS\Config;
 use LSYS\Loger;
 use LSYS\Exception;
 use function LSYS\MQ\__;
+use LSYS\Config\SubSet;
 class Redis implements Handler,SService {
 	use RedisShare;
 	/**
@@ -21,7 +22,7 @@ class Redis implements Handler,SService {
 	 */
 	protected $_redis;
 	public function __construct(Config $config){
-		$_config=\LSYS\ConfigShare::sub_config($config, "config");
+		$_config=$config->exist("config")?new SubSet($config, "config"):NULL;
 		try{
 			$this->_redis = self::get_service($_config);
 		}catch (\Exception $e){
