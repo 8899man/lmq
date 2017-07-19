@@ -16,7 +16,6 @@ use AliyunMNS\Model\SubscriptionAttributes;
 use AliyunMNS\Requests\PublishMessageRequest;
 use AliyunMNS\Requests\CreateTopicRequest;
 use AliyunMNS\Exception\MnsException;
-use LSYS\Core;
 require_once(__DIR__.'/../../../../libs/mns-autoloader.php');
 class MQS implements Handler {
 	/**
@@ -28,23 +27,10 @@ class MQS implements Handler {
 		$this->_config=$config->get("config",array())+array(
 			'accessId'=>'',
 			'accessKey'=>'',
-			'endPoint'=>$this->_end_point_default(),
+			'endPoint'=>'',
 		);
-		echo $this->_end_point_default();
 		$this->client = new Client($this->_config['endPoint'], $this->_config['accessId'], $this->_config['accessKey']);
 	}
-	
-	protected function _end_point_default(){
-		$host='127.0.0.1';
-		$port='';
-		$scheme='http://';
-		if(isset($_SERVER['SERVER_PORT'])&&$_SERVER['SERVER_PORT']!='80')$port=':'.$_SERVER['SERVER_PORT'];
-		if (isset($_SERVER['SERVER_NAME'])) $host=$_SERVER['SERVER_NAME'];
-		if (isset($_SERVER['HTTP_HOST'])) $host=$_SERVER['HTTP_HOST'];
-		if(isset($_SERVER['HTTPS'])&&strtolower($_SERVER['HTTPS']) == "on") $scheme="https://";
-		return $scheme.$host.$port.Core::$base_url.'dome/aliyun.php';
-	}
-	
 	protected function get_by_url($url)
 	{
 		$ch = curl_init();
@@ -172,12 +158,11 @@ class MQS implements Handler {
 		}
 		return true;
 	}
-	public function subscribe($topic,$endpoint=null){
-		if ($endpoint==null)$endpoint=$this->_end_point_default();
+	public function subscribe($topic,$endpoint){
 		$topic = $this->client->getTopicRef($topic);
 		$attributes = new SubscriptionAttributes($topic, $endpoint);
 		try{
-		$topic->subscribe($attributes);
+			$topic->subscribe($attributes);
 		}
 		catch (MnsException $e)
 		{
@@ -190,7 +175,6 @@ class MQS implements Handler {
 		try
 		{
 			$topic->unsubscribe($topic);
-			echo "Unsubscribe Succeed! \n";
 		}
 		catch (MnsException $e)
 		{
