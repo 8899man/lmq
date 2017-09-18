@@ -17,6 +17,10 @@ return array(
 			'group'=>'default',
 		)
 	),
+	"stomp"=>array(
+		'handler'=>\LSYS\MQ\Handler\Stomp::class,
+		'server'=>'tcp://127.0.0.1:61613'
+	),
 	"mqs"=>array(
 		'handler'=>\LSYS\MQ\Handler\MQS::class,
 		'config'=>array(
