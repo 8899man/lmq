@@ -12,6 +12,7 @@
     "require": {
      	"php": ">=5.5",
 		"shanliu/lshareredis":"^1.0.0",
+		"shanliu/lloger":"^1.0.0",
 	 	"shanliu/lconfig":"^1.0.0"
 	}
 }
