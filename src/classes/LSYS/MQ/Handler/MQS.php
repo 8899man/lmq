@@ -114,7 +114,7 @@ class MQS implements Handler {
 			http_response_code(401);
 			return;
 		}
-		$msg = new SimpleXMLElement($content);
+		$msg = new \SimpleXMLElement($content);
 		$_msg=@unserialize($msg->Message);
 		if ($_msg instanceof Message){
 			try{
