@@ -14,5 +14,11 @@
 		"shanliu/lshareredis":"^1.0.0",
 		"shanliu/lloger":"^1.0.0",
 	 	"shanliu/lconfig":"^1.0.0"
+	},
+	"require-dev" : {
+		"shanliu/lormcache" : "v0.2.0.8"
+	},
+	"suggest" : {
+		"nmred/kafka-php" : "Kafka Handler require"
 	}
 }
