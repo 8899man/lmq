@@ -13,7 +13,6 @@ class MQ implements ConfigFinder{
 	use \LSYS\ConfigFinder\ConfigShare;
 	public static $topic='LMQ';
 	/**
-	 *
 	 * @var string default instance name
 	 */
 	public static $config = 'lmq.redis';
@@ -32,24 +31,31 @@ class MQ implements ConfigFinder{
 		}
 		$name=$config->name();
 		if (!isset(self::$_instances[$name])){
-			$handler=$config->get("handler",NULL);
-			if ($handler==null){
-				throw new Exception ( __('MQ handler not defined in [:name] configuration',array("name"=>$config->name()) ));
-			}
-			if (!class_exists($handler)||!in_array('LSYS\MQ\Handler',class_implements($handler))){
-				throw new Exception(__("MQ handler [:handler] wong,not extends \LSYS\MQ\Handler",array("handler"=>$handler)));
-			}
-			$obj=new static(new $handler($config));
-			self::$_instances[$name]=$obj;
+			self::$_instances[$name]=new static($config);
 		}
 		return self::$_instances[$name];
 	}
 	/**
+	 * @var Config
+	 */
+	protected $_config;
+	/**
 	 * @var Handler
 	 */
 	protected $_handle;
-	public function __construct(Handler $handle){
-		$this->_handle=$handle;
+	public function __construct(Config $config){
+	    $handler=$config->get("handler",NULL);
+	    if ($handler==null){
+	        throw new Exception ( __('MQ handler not defined in [:name] configuration',array("name"=>$config->name()) ));
+	    }
+	    if (!class_exists($handler)||!in_array('LSYS\MQ\Handler',class_implements($handler))){
+	        throw new Exception(__("MQ handler [:handler] wong,not extends \LSYS\MQ\Handler",array("handler"=>$handler)));
+	    }
+	    $this->_handle=new $handler($config);
+	    $this->_config=$config;
+	}
+	public function __destruct(){
+	    unset(self::$_instances[$this->_config->name()]);
 	}
 	public function listen($topic=null){
 		$topic=$topic===null?self::$topic:$topic;

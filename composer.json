@@ -1,19 +1,21 @@
 {
-	"name": "shanliu/lmq",
-	"type": "project",
-	"version": "1.0.0",
-	"description": "lsys message queue",
-	"autoload":{
-		"psr-4": {
-        	"LSYS\\" : "src/classes/LSYS/"
+	"name" : "shanliu/lmq",
+	"type" : "project",
+	"version" : "1.0.1",
+	"description" : "lsys message queue",
+	"autoload" : {
+		"psr-4" : {
+			"LSYS\\" : "src/classes/LSYS/"
 		},
-		"files": ["src/Bootstarp.php"]
-    },
-    "require": {
-     	"php": ">=5.5",
-		"shanliu/lshareredis":"^1.0.0",
-		"shanliu/lloger":"^1.0.0",
-	 	"shanliu/lconfig":"^1.0.0"
+		"files" : [
+			"src/Bootstarp.php"
+		]
+	},
+	"require" : {
+		"php" : ">=5.5",
+		"shanliu/lshareredis" : "^1.0.0",
+		"shanliu/lloger" : "^1.0.0",
+		"shanliu/lconfig" : "^1.0.0"
 	},
 	"require-dev" : {
 		"nmred/kafka-php" : "v0.2.0.8"
