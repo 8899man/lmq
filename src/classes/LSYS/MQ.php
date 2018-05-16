@@ -22,7 +22,7 @@ class MQ implements ConfigFinder{
 	 * @param Config $config
 	 * @return MQ
 	 */
-	public static function instance(Config $config=null){
+	public static function &instance(Config $config=null){
 		if ($config === NULL){
 			if (is_string(self::$config)){
 				self::$config = self::find_config(self::$config);
