@@ -18,9 +18,11 @@
 		"shanliu/lconfig" : "^1.0.0"
 	},
 	"require-dev" : {
-		"nmred/kafka-php" : "v0.2.0.8"
+		"nmred/kafka-php" : "v0.2.0.8",
+		"guzzlehttp/guzzle" : "^6.3.0"
 	},
 	"suggest" : {
-		"nmred/kafka-php" : "Kafka Handler require"
+		"nmred/kafka-php" : "Kafka Handler require",
+		"guzzlehttp/guzzle" : "AliyunMNS Handler require"
 	}
 }
